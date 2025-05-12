@@ -1,0 +1,12 @@
+body {
+  background-color: #f5f7fa;
+}
+
+.card {
+  border-radius: 20px;
+}
+
+#preview img {
+  border: 2px dashed #ccc;
+  padding: 10px;
+}

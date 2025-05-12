@@ -1,0 +1,9 @@
+# Ignore datasets
+/dataset/
+*.csv
+*.xlsx
+*.json
+*.txt
+.idea/
+__pycache__/
+uploads
