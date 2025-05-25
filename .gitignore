@@ -1,7 +1,7 @@
 # Ignore datasets
 *.xlsx
 *.json
-*.txt
+dataset/**/*.txt
 *.jpg
 *.png
 .idea/

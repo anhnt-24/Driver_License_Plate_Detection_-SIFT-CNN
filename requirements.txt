@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+opencv-python
+numpy
+pillow
+matplotlib
+scikit-learn
+imutils
+scikit-image
+keras
+tensorflow
+jinja2
+python-multipart
