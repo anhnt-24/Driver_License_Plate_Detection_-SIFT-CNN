@@ -1,9 +1,8 @@
 # Ignore datasets
-/dataset/
-*.csv
 *.xlsx
 *.json
 *.txt
+*.jpg
+*.png
 .idea/
 __pycache__/
-uploads

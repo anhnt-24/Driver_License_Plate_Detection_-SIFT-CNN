@@ -1,5 +1,5 @@
 import pickle
-from Sift_v2 import *
+from Sift_v1 import *
 
 os.makedirs('desc', exist_ok=True)
 os.makedirs('info', exist_ok=True)

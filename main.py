@@ -4,7 +4,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 import uuid
 from DetectBoundingBox import *
-from v5 import lp_char_recog
+from OCR_v1 import lp_char_recog
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
@@ -30,7 +30,6 @@ async def upload_image(request: Request, file: UploadFile = File(...)):
     cv2.imwrite(result_path, result)
     cropped_path = os.path.join("static/results", "cropped.jpg")
     cv2.imwrite(cropped_path, cropped_region)
-    # characters=recognize_character(cropped_path)
     plate_image = cv2.imread(cropped_path)
 
     characters = lp_char_recog(plate_image)

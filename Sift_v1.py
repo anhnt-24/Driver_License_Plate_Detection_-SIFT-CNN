@@ -473,19 +473,8 @@ class SiftHandler:
 
         self.gen_gaussian_images()
         self.gen_dog_images()
-
-        temp = self.onex.astype(np.uint8)
-        temp2 = temp.copy()
-
         self.gen_scale_space_extrema()
         self.clean_keypoints()
-        cv_keypoints = self.get_cv2_keypoints()
-        #
-        # out = cv2.drawKeypoints(temp2, cv_keypoints, None,
-        #                         color=(0, 0, 255),
-        #                         flags=cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-        # cv2.imwrite(f"{self.name}_keypoints.png", out)
-
 
         self.get_descriptors()
         print(f"Keypoints Calculated: {len(self.keypoints)}")
@@ -623,7 +612,7 @@ def main():
     matches=match_keypoints_bf(sift1.descriptors,sift2.descriptors)
     matched_img = draw_matches(sift1.base_image, sift1.keypoints, sift2.base_image, sift2.keypoints, matches)
     cv2.imshow("Keypoints Matching", matched_img)
-    result,bbox = draw_bounding_box_on_img2(sift2.base_image, sift2.keypoints, matches)
+    result,cropped_region,bbox, = draw_bounding_box_on_img2(sift2.base_image, sift2.keypoints, matches)
     cv2.imshow("Result", result)
     cv2.waitKey(0)
     cv2.destroyAllWindows()

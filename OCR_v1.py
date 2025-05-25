@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 import keras
+from matplotlib import pyplot as plt
+
 from rotate_and_recrop_lp import auto_rotate_and_crop_lp
 load_model=keras.models.load_model
 import imutils
@@ -322,32 +324,34 @@ def lp_char_recog(plate_image, show_image=False):
 
     segmented_chars, plate_type = determine_plate_type_and_order(best_char_data, best_img_binary.shape[0])
     print(f"Detected plate type: {plate_type}")
-
-    model_path = 'models/lp_char_recog_model_v2.h5'
+    # plt.figure(figsize=(12, 3))
+    # for i, char_img in enumerate(segmented_chars):
+    #     plt.subplot(1, len(segmented_chars), i + 1)
+    #     plt.imshow(char_img, cmap='gray')
+    #     plt.title(f"Char {i + 1}")
+    #     plt.axis('off')
+    # plt.suptitle(f"Segmented Characters (Plate Type: {plate_type})")
+    # plt.show()
+    # Load model
+    model_path = 'models/weight.keras'
     model = load_model(model_path)
 
-    # Perform character recognition
-    def fix_dimension(img):
-        new_img = np.zeros((28, 28, 3))
-        for i in range(3):
-            new_img[:, :, i] = img
-        return new_img
-
-    dic = {}
-    characters = '0123456789ABCDEFGHKLMNPQRSTUVXYZ'
-    for i, c in enumerate(characters):
-        dic[i] = c
-    print(dic)
+    char_dict = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'K',
+                 9: 'L', 10: 'M', 11: 'N', 12: 'P', 13: 'R', 14: 'S', 15: 'T', 16: 'U',
+                 17: 'V', 18: 'X', 19: 'Y', 20: 'Z', 21: '0', 22: '1', 23: '2', 24: '3',
+                 25: '4', 26: '5', 27: '6', 28: '7', 29: '8', 30: '9', 31: "Background"}
 
     output = []
-    for i, char_img in enumerate(segmented_chars):
-        img_ = cv2.resize(char_img, (28, 28), interpolation=cv2.INTER_AREA)
-        img = fix_dimension(img_)
-        img = img.reshape(1, 28, 28, 3)
-        y_ = np.argmax(model.predict(img), axis=-1)[0]
-        character = dic[y_]
+    for char_img in segmented_chars:
+        img = cv2.resize(char_img, (28, 28), interpolation=cv2.INTER_AREA)
+        img = img.reshape(28, 28, 1)
+        img_input = img.reshape(1, 28, 28, 1)
+        pred = model.predict(img_input)
+        char_idx = np.argmax(pred, axis=-1)[0]
+        predicted_char = char_dict[char_idx]
 
-        output.append(character)
+        if predicted_char != "Background":
+            output.append(predicted_char)
 
     plate_number = ''.join(output)
     return plate_number
@@ -364,4 +368,4 @@ if __name__ == "__main__":
         print(f"Recognized license plate: {result}")
 
 
-    test_recognition("dataset/cropped/greenpack_0019_0.jpg")
+    test_recognition("dataset/cropped/greenpack_0169_0.jpg")

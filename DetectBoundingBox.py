@@ -1,7 +1,7 @@
 import csv
 import pickle
 from concurrent.futures import ProcessPoolExecutor, as_completed
-from Sift_v2 import *
+from Sift_v1 import *
 
 def draw_keypoints_with_match(image, keypoints, matches):
     img_with_keypoints = image.copy()
@@ -70,27 +70,14 @@ def get_bounding_box(file_path):
         file_path = best_match_data['file_path']
         file_name = os.path.basename(file_path)
         print(f"\nBest match: {file_name} with {best_match_count} matches")
-
-        best_img_name = file_name.replace("_desc_oriented.pkl", "") + ".jpg"
-        best_img_path = os.path.join("dataset/cropped", best_img_name)
-
         try:
-            img_best = cv2.imread(best_img_path, cv2.IMREAD_GRAYSCALE)
 
-            if img_best is None:
-                print(f"Could not load best match image from {best_img_path}")
-                return
 
             result,cropped_region,bbox = draw_bounding_box_on_img2(
                 sift.base_image,
                 keypoints,
                 best_match_data['matches']
             )
-
-            # cv2.imshow("keypoints2", draw_keypoints_with_match(sift.base_image, keypoints, matches_keypoints))
-            # cv2.imshow("cropped_region", result)
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
             return result, cropped_region,bbox
 
         except Exception as e:
